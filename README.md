@@ -18,5 +18,6 @@ run `python3 main.py` and write a specific year
 # Modules used
 
 -bs4 Beautiful Soup
-
 -requests
+-spotipy
+-spotipy.ouath2
