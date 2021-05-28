@@ -3,14 +3,14 @@ import requests
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 
-CLIENT_ID = "??"
-CLIENT_SECRET = "??"
+CLIENT_ID = "???"
+CLIENT_SECRET = "???"
 
 sp = spotipy.Spotify(
     auth_manager=SpotifyOAuth(
         client_id=CLIENT_ID, 
         client_secret=CLIENT_SECRET, 
-        scope="playlist-modify-private", 
+        scope="playlist-modify-public", 
         redirect_uri="http://example.com",
         show_dialog=True,
         cache_path="token.txt",
@@ -30,6 +30,9 @@ songs = soup.find_all(name="span", class_="chart-element__information__song")
 
 song_list = [song.getText() for song in songs]
 
+playlist = sp.user_playlist_create(user=user_id, name=f"{date} Billboard 100", public=True, collaborative=False, description=f"A playlist with the top 100 hits of {year}.")
+playlist_id = playlist["id"]
+print(playlist_id)
 
 song_uris = []
 for song in song_list:
@@ -41,3 +44,4 @@ for song in song_list:
     except IndexError:
         print(f"{song} does not exist in Spotify. Skipped.")
 
+sp.playlist_add_items(playlist_id=playlist_id, items=song_uris, position=None)
